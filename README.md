@@ -60,7 +60,7 @@ This will create a new SQL dump file in the `prisma/backups/` directory.
 
 **Restore from a specific file:**
 ```sh
-./backup.sh restore prisma/backups/backup_YYYY-MM-DD_HH-MM-SS.sql
+./backup.sh restore prisma/backups/backup_YYYY-MM-DD_HH-MM-SS.dump
 ```
 
 ## Development

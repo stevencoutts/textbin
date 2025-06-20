@@ -22,14 +22,14 @@ usage() {
 
 # Find the latest backup file
 if [ -d "$BACKUP_DIR" ]; then
-    LATEST_BACKUP=$(ls -t "$BACKUP_DIR"/*.sql 2>/dev/null | head -n 1)
+    LATEST_BACKUP=$(ls -t "$BACKUP_DIR"/*.dump 2>/dev/null | head -n 1)
 fi
 
 case "$ACTION" in
     backup)
         echo "Backing up database..."
-        FILENAME="$BACKUP_DIR/backup_$(date +%Y-%m-%d_%H-%M-%S).sql"
-        docker exec "$DB_CONTAINER" pg_dump --clean -U "$DB_USER" -d "$DB_NAME" > "$FILENAME"
+        FILENAME="$BACKUP_DIR/backup_$(date +%Y-%m-%d_%H-%M-%S).dump"
+        docker exec "$DB_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" -F c > "$FILENAME"
         echo "Backup created at $FILENAME"
         ;;
     restore)
@@ -45,7 +45,7 @@ case "$ACTION" in
         echo "Restoring database from $TARGET_BACKUP..."
         docker exec "$DB_CONTAINER" psql -U "$DB_USER" -d postgres -c "DROP DATABASE IF EXISTS \"$DB_NAME\" WITH (FORCE);"
         docker exec "$DB_CONTAINER" psql -U "$DB_USER" -d postgres -c "CREATE DATABASE \"$DB_NAME\";"
-        cat "$TARGET_BACKUP" | docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME"
+        cat "$TARGET_BACKUP" | docker exec -i "$DB_CONTAINER" pg_restore -U "$DB_USER" -d "$DB_NAME"
         echo "Restore complete."
         ;;
     *)
