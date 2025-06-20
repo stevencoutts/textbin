@@ -2,6 +2,7 @@ version: '3.8'
 services:
   db:
     image: postgres:15
+    container_name: textbin-db
     restart: always
     env_file: .env
     environment:
@@ -14,6 +15,7 @@ services:
       - "5432:5432"
   app:
     build: .
+    container_name: textbin-app
     command: npm start
     volumes:
       - .:/usr/src/app
