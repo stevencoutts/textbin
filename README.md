@@ -47,6 +47,26 @@ A Docker-hosted pastebin webapp with search, built with Node.js, Express, Prisma
 6. **Visit the app:**
    Open [http://localhost:3000](http://localhost:3000)
 
+## Backup and Restore
+
+A helper script `backup.sh` is provided to backup and restore the PostgreSQL database.
+
+**Create a backup:**
+```sh
+./backup.sh backup
+```
+This will create a new SQL dump file in the `prisma/backups/` directory.
+
+**Restore from the latest backup:**
+```sh
+./backup.sh restore
+```
+
+**Restore from a specific file:**
+```sh
+./backup.sh restore prisma/backups/backup_YYYY-MM-DD_HH-MM-SS.sql
+```
+
 ## Development
 - App code is in `src/`
 - Prisma schema is in `prisma/schema.prisma`
