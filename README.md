@@ -26,10 +26,6 @@ A Docker-hosted pastebin webapp with search, built with Node.js, Express, Prisma
 
 3. **Run Prisma migrations:**
    ```sh
-   npx prisma migrate dev --name init
-   ```
-   Or, if using Docker Compose:
-   ```sh
    docker-compose run --rm app npx prisma migrate dev --name init --skip-seed
    ```
 
