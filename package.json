@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "prisma": "prisma"
+    "prisma": "prisma",
+    "build": "npx prisma generate && npm install --production"
   },
   "dependencies": {
     "@prisma/client": "^6.10.1",

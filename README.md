@@ -33,12 +33,18 @@ A Docker-hosted pastebin webapp with search, built with Node.js, Express, Prisma
    docker-compose run --rm app npx prisma migrate dev --name init --skip-seed
    ```
 
-4. **Start with Docker Compose:**
+4. **Build for production:**
+   ```sh
+   ./build.sh
+   ```
+   This will generate the Prisma client and install only production dependencies.
+
+5. **Start with Docker Compose:**
    ```sh
    docker-compose up --build
    ```
 
-5. **Visit the app:**
+6. **Visit the app:**
    Open [http://localhost:3000](http://localhost:3000)
 
 ## Development
