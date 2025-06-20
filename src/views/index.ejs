@@ -6,9 +6,17 @@
 </head>
 <body>
   <h1>textbin</h1>
+  <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+    <ul style="color: red;">
+      <% errors.forEach(function(error) { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
   <form action="/paste" method="POST">
-    <input type="text" name="title" placeholder="Title" required><br>
-    <textarea name="content" placeholder="Paste your text here..." rows="8" cols="40" required></textarea><br>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input type="text" name="title" placeholder="Title" required maxlength="100" value="<%= old && old.title ? old.title : '' %>"><br>
+    <textarea name="content" placeholder="Paste your text here..." rows="8" cols="40" required maxlength="10000"><%= old && old.content ? old.content : '' %></textarea><br>
     <button type="submit">Create Paste</button>
   </form>
   <h2>Recent Pastes</h2>
