@@ -1,0 +1,21 @@
+{
+  "name": "textbin",
+  "version": "1.0.0",
+  "description": "A Docker-hosted pastebin webapp with search, using Node.js, Express, and PostgreSQL via Prisma.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "prisma": "prisma"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "prisma": "^5.12.0",
+    "@prisma/client": "^5.12.0",
+    "ejs": "^3.1.9",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+} 

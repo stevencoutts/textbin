@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search - textbin</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Search Pastes</h1>
+  <form action="/search" method="GET">
+    <input type="text" name="q" value="<%= q || '' %>" placeholder="Search pastes...">
+    <button type="submit">Search</button>
+  </form>
+  <% if (q) { %>
+    <h2>Results for "<%= q %>"</h2>
+    <ul>
+      <% results.forEach(paste => { %>
+        <li><a href="/paste/<%= paste.id %>"><%= paste.title %></a> (<%= paste.createdAt.toLocaleString() %>)</li>
+      <% }) %>
+      <% if (results.length === 0) { %>
+        <li>No results found.</li>
+      <% } %>
+    </ul>
+  <% } %>
+  <a href="/">Back to home</a>
+</body>
+</html> 

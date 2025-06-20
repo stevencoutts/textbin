@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= paste.title %> - textbin</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1><%= paste.title %></h1>
+  <pre><%= paste.content %></pre>
+  <p>Created at: <%= paste.createdAt.toLocaleString() %></p>
+  <a href="/">Back to home</a>
+</body>
+</html> 

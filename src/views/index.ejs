@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>textbin - Pastebin</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>textbin</h1>
+  <form action="/paste" method="POST">
+    <input type="text" name="title" placeholder="Title" required><br>
+    <textarea name="content" placeholder="Paste your text here..." rows="8" cols="40" required></textarea><br>
+    <button type="submit">Create Paste</button>
+  </form>
+  <h2>Recent Pastes</h2>
+  <ul>
+    <% pastes.forEach(paste => { %>
+      <li><a href="/paste/<%= paste.id %>"><%= paste.title %></a> (<%= paste.createdAt.toLocaleString() %>)</li>
+    <% }) %>
+  </ul>
+  <form action="/search" method="GET">
+    <input type="text" name="q" placeholder="Search pastes...">
+    <button type="submit">Search</button>
+  </form>
+</body>
+</html> 
