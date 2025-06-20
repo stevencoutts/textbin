@@ -29,7 +29,7 @@ case "$ACTION" in
     backup)
         echo "Backing up database..."
         FILENAME="$BACKUP_DIR/backup_$(date +%Y-%m-%d_%H-%M-%S).sql"
-        docker exec "$DB_CONTAINER" pg_dump -U "$DB_USER" -d "$DB_NAME" > "$FILENAME"
+        docker exec "$DB_CONTAINER" pg_dump --clean -U "$DB_USER" -d "$DB_NAME" > "$FILENAME"
         echo "Backup created at $FILENAME"
         ;;
     restore)
@@ -43,6 +43,8 @@ case "$ACTION" in
             exit 1
         fi
         echo "Restoring database from $TARGET_BACKUP..."
+        docker exec "$DB_CONTAINER" psql -U "$DB_USER" -d postgres -c "DROP DATABASE IF EXISTS \"$DB_NAME\" WITH (FORCE);"
+        docker exec "$DB_CONTAINER" psql -U "$DB_USER" -d postgres -c "CREATE DATABASE \"$DB_NAME\";"
         cat "$TARGET_BACKUP" | docker exec -i "$DB_CONTAINER" psql -U "$DB_USER" -d "$DB_NAME"
         echo "Restore complete."
         ;;
