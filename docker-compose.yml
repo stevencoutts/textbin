@@ -16,7 +16,6 @@ services:
   app:
     build: .
     container_name: textbin-app
-    command: npm start
     volumes:
       - .:/usr/src/app
     ports:
