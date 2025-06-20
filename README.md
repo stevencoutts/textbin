@@ -58,4 +58,7 @@ A Docker-hosted pastebin webapp with search, built with Node.js, Express, Prisma
   ```
 
 ---
-MIT License 
+
+## License
+
+This project is released under [The Unlicense](./UNLICENSE). See the UNLICENSE file for details. 
