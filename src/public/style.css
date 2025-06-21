@@ -21,15 +21,19 @@ input[type="text"], textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-button {
+button, .button {
   background: #2a7ae2;
   color: #fff;
   border: none;
   padding: 0.5em 1.5em;
   border-radius: 4px;
   cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-family: Arial, sans-serif;
+  font-size: 1em;
 }
-button:hover {
+button:hover, .button:hover {
   background: #155a96;
 }
 ul {
