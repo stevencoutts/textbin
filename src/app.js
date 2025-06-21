@@ -69,7 +69,24 @@ app.post('/paste', createPasteLimiter, [
 app.get('/paste/:id', async (req, res) => {
   const paste = await prisma.paste.findUnique({ where: { id: req.params.id } });
   if (!paste) return res.status(404).send('Paste not found');
-  res.render('paste', { paste });
+  res.render('paste', { paste, csrfToken: req.csrfToken() });
+});
+
+// Delete paste
+app.post('/paste/:id/delete', async (req, res) => {
+  try {
+    await prisma.paste.delete({
+      where: { id: req.params.id },
+    });
+    res.redirect('/');
+  } catch (error) {
+    // P2025 is Prisma's code for "Record to delete does not exist."
+    if (error.code === 'P2025') {
+      return res.status(404).send('Paste not found.');
+    }
+    // Handle other potential errors
+    res.status(500).send('Error deleting paste.');
+  }
 });
 
 // Search pastes
