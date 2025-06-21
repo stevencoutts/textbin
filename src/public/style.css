@@ -48,4 +48,36 @@ pre {
   padding: 1em;
   border-radius: 4px;
   white-space: pre-wrap;
+}
+
+.paste-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.paste-header h1 {
+  margin: 0;
+}
+
+.delete-form {
+  margin: 0;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.delete-button svg {
+  width: 24px;
+  height: 24px;
+  fill: #666;
+}
+
+.delete-button:hover svg {
+  fill: #e53e3e;
 } 

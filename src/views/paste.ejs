@@ -5,16 +5,20 @@
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <h1><%= paste.title %></h1>
+  <div class="paste-header">
+    <h1><%= paste.title %></h1>
+    <form class="delete-form" action="/paste/<%= paste.id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this paste?');">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button type="submit" class="delete-button" title="Delete Paste">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M16 6H4v11a2 2 0 002 2h8a2 2 0 002-2V6zM8 9v6h1V9H8zm3 0v6h1V9h-1zM4 3h12l-2 2H6L4 3zm5-2h2v2H9V1z"></path></svg>
+      </button>
+    </form>
+  </div>
   <pre><%= paste.content %></pre>
   <p>Created at: <%= paste.createdAt.toLocaleString() %></p>
   
   <div class="actions">
     <a href="/" class="button">Back to home</a>
-    <form action="/paste/<%= paste.id %>/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this paste?');">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-      <button type="submit" class="delete-button">Delete Paste</button>
-    </form>
   </div>
 </body>
 </html> 
