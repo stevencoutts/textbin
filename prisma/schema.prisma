@@ -9,8 +9,20 @@ datasource db {
 }
 
 model Paste {
-  id        String   @id @default(uuid())
+  id        String       @id @default(uuid())
   title     String
   content   String
-  createdAt DateTime @default(now())
+  createdAt DateTime     @default(now())
+  attachments Attachment[]
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  filename  String
+  mimetype  String
+  size      Int
+  path      String
+  paste     Paste    @relation(fields: [pasteId], references: [id], onDelete: Cascade)
+  pasteId   String
+  uploadedAt DateTime @default(now())
 } 

@@ -17,6 +17,20 @@
   <pre><%= paste.content %></pre>
   <p>Created at: <%= paste.createdAt.toLocaleString() %></p>
   
+  <% if (paste.attachments && paste.attachments.length > 0) { %>
+    <div class="attachments">
+      <h3>Attachments:</h3>
+      <ul>
+        <% paste.attachments.forEach(function(att) { %>
+          <li>
+            <a href="/attachment/<%= att.id %>" download><%= att.filename %></a>
+            (<%= (att.size / 1024).toFixed(1) %> KB)
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+
   <div class="actions">
     <a href="/" class="button">Back to home</a>
   </div>
