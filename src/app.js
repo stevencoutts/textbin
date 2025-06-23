@@ -29,6 +29,11 @@ const searchLimiter = rateLimit({
   max: 30, // limit each IP to 30 searches per minute
   message: 'Too many searches from this IP, please try again later.'
 });
+const downloadLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 30, // limit each IP to 30 downloads per minute
+  message: 'Too many downloads from this IP, please try again later.'
+});
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -103,7 +108,7 @@ app.get('/paste/:id', csrf({ cookie: true }), async (req, res) => {
 });
 
 // Download attachment
-app.get('/attachment/:id', async (req, res) => {
+app.get('/attachment/:id', downloadLimiter, async (req, res) => {
   const attachment = await prisma.attachment.findUnique({ where: { id: req.params.id } });
   if (!attachment) return res.status(404).send('Attachment not found');
   const filePath = path.join(__dirname, '../uploads', attachment.path);
