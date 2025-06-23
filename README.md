@@ -1,11 +1,23 @@
 # textbin
 
-A Docker-hosted pastebin webapp with search, built with Node.js, Express, Prisma, and PostgreSQL.
+A Docker-hosted pastebin webapp with search, file attachments, and security best practices. Built with Node.js, Express, Prisma, and PostgreSQL.
+
+---
 
 ## Features
+
 - Submit and view text pastes
-- Search pastes by title or content
+- Attach up to 10 files (max 200MB each) per paste (files stored on disk)
+- Download attachments from paste view
+- Search pastes by title or content (full-text search, PostgreSQL)
+- Delete pastes (with attachments cleaned up)
+- Rate limiting on paste creation and search
+- CSRF protection on all forms
 - All data stored in PostgreSQL
+- Backup and restore scripts for the database
+- Dockerized for easy deployment
+
+---
 
 ## Quick Start
 
@@ -26,22 +38,33 @@ A Docker-hosted pastebin webapp with search, built with Node.js, Express, Prisma
 
 3. **Run Prisma migrations:**
    ```sh
-   docker-compose run --rm app npx prisma migrate dev --name init --skip-seed
+   docker-compose run --rm app npx prisma migrate deploy
    ```
+   This will apply all schema changes to your database.
 
-4. **Build for production:**
+4. **Build and start the app:**
    ```sh
    ./build.sh
    ```
-   This will generate the Prisma client and install only production dependencies.
+   This will generate the Prisma client, install production dependencies, and start the app in the background.
 
-5. **Start with Docker Compose:**
-   ```sh
-   docker-compose up --build
-   ```
+   - For a completely clean build (removes DB, volumes, and node_modules):
+     ```sh
+     ./build.sh clean
+     ```
 
-6. **Visit the app:**
+5. **Visit the app:**
    Open [http://localhost:3000](http://localhost:3000)
+
+---
+
+## File Attachments
+
+- You can attach up to 10 files (max 200MB each) to any paste.
+- Files are stored in the `uploads/` directory (not committed to git).
+- Attachments are shown and downloadable on the paste view page.
+
+---
 
 ## Backup and Restore
 
@@ -51,7 +74,7 @@ A helper script `backup.sh` is provided to backup and restore the PostgreSQL dat
 ```sh
 ./backup.sh backup
 ```
-This will create a new SQL dump file in the `prisma/backups/` directory.
+This will create a new `.dump` file in the `prisma/backups/` directory.
 
 **Restore from the latest backup:**
 ```sh
@@ -63,21 +86,73 @@ This will create a new SQL dump file in the `prisma/backups/` directory.
 ./backup.sh restore prisma/backups/backup_YYYY-MM-DD_HH-MM-SS.dump
 ```
 
+---
+
 ## Development
-- App code is in `src/`
-- Prisma schema is in `prisma/schema.prisma`
-- Views are in `src/views/`
-- Static files are in `src/public/`
+
+- App code: `src/`
+- Prisma schema: `prisma/schema.prisma`
+- Views: `src/views/`
+- Static files: `src/public/`
+- File uploads: `uploads/`
+- Database backups: `prisma/backups/`
+
+---
 
 ## Environment Variables
-- All secrets and DB credentials are managed in the `.env` file (not committed).
-- Example `.env`:
-  ```env
-  POSTGRES_USER=textbin
-  POSTGRES_PASSWORD=yourStrongPasswordHere
-  POSTGRES_DB=textbin
-  DATABASE_URL=postgres://textbin:yourStrongPasswordHere@db:5432/textbin
-  ```
+
+All secrets and DB credentials are managed in the `.env` file (not committed).
+
+Example `.env`:
+```env
+POSTGRES_USER=textbin
+POSTGRES_PASSWORD=yourStrongPasswordHere
+POSTGRES_DB=textbin
+DATABASE_URL=postgres://textbin:yourStrongPasswordHere@db:5432/textbin
+```
+
+---
+
+## Database Schema
+
+The main models are:
+
+```prisma
+model Paste {
+  id          String       @id @default(uuid())
+  title       String
+  content     String
+  createdAt   DateTime     @default(now())
+  attachments Attachment[]
+}
+
+model Attachment {
+  id         String   @id @default(uuid())
+  filename   String
+  mimetype   String
+  size       Int
+  path       String
+  paste      Paste    @relation(fields: [pasteId], references: [id], onDelete: Cascade)
+  pasteId    String
+  uploadedAt DateTime @default(now())
+}
+```
+
+---
+
+## Security
+
+- **CSRF protection** on all forms (including file uploads)
+- **Rate limiting** on paste creation and search
+- **Input validation and sanitization** using `express-validator`
+- **Secrets** are never committed to git
+
+---
+
+## Build Script
+
+- `./build.sh` — Build and start the app in the background
+- `./build.sh clean` — Remove all containers, volumes, and node_modules for a fresh build
 
 ---
 
