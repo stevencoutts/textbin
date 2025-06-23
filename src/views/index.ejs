@@ -13,10 +13,12 @@
       <% }) %>
     </ul>
   <% } %>
-  <form action="/paste" method="POST">
+  <form action="/paste" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <input type="text" name="title" placeholder="Title" required maxlength="100" value="<%= old && old.title ? old.title : '' %>"><br>
     <textarea name="content" placeholder="Paste your text here..." rows="8" cols="40" required maxlength="10000"><%= old && old.content ? old.content : '' %></textarea><br>
+    <input type="file" name="attachments" multiple accept="*/*"><br>
+    <small>You may attach up to 10 files (max 200MB each).</small><br>
     <button type="submit">Create Paste</button>
   </form>
   <h2>Recent Pastes</h2>
