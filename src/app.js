@@ -134,7 +134,7 @@ app.post('/paste/:id/delete', csrf({ cookie: true }), async (req, res) => {
 });
 
 // Search pastes
-app.get('/search', searchLimiter, async (req, res) => {
+app.get('/search', searchLimiter, csrf({ cookie: true }), async (req, res) => {
   const { q } = req.query;
   let results = [];
   if (q) {
