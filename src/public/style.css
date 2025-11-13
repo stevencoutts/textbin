@@ -80,4 +80,14 @@ pre {
 
 .delete-button:hover svg {
   fill: #e53e3e;
+}
+
+.attachment-preview {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.5em 0 0.5em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
 } 

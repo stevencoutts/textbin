@@ -116,6 +116,16 @@ app.get('/attachment/:id', downloadLimiter, async (req, res) => {
   res.download(filePath, attachment.filename);
 });
 
+// Inline view (preview) attachment
+app.get('/attachment/:id/view', downloadLimiter, async (req, res) => {
+  const attachment = await prisma.attachment.findUnique({ where: { id: req.params.id } });
+  if (!attachment) return res.status(404).send('Attachment not found');
+  const filePath = path.join(__dirname, '../uploads', attachment.path);
+  if (!fs.existsSync(filePath)) return res.status(404).send('File not found');
+  res.type(attachment.mimetype);
+  res.sendFile(filePath);
+});
+
 // Delete paste
 app.post('/paste/:id/delete', csrf({ cookie: true }), async (req, res) => {
   try {
