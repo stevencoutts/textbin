@@ -1,11 +1,24 @@
 #!/bin/bash
 set -e
 
+# Resolve Docker Compose command (prefer v2: `docker compose`)
+COMPOSE="docker compose"
+if ! docker compose version >/dev/null 2>&1; then
+    if command -v docker-compose >/dev/null 2>&1; then
+        COMPOSE="docker-compose"
+    else
+        echo "Error: Docker Compose not found. Install docker compose plugin or docker-compose."
+        exit 1
+    fi
+fi
+
+echo "Using Compose command: $COMPOSE"
+
 # Clean build function
 clean_build() {
     echo "Performing a clean build..."
     echo "Stopping and removing Docker containers, volumes, and images..."
-    docker-compose down --volumes --rmi local
+    $COMPOSE down --volumes --rmi local
     
     echo "Removing node_modules..."
     rm -rf node_modules
@@ -25,9 +38,9 @@ echo "Installing production dependencies..."
 npm install --omit=dev # Use --omit=dev for modern npm
 
 echo "Building and starting Docker containers in detached mode..."
-docker-compose up --build -d
+$COMPOSE up --build -d
 
 echo "Build and Docker startup complete."
 echo "Application is running in the background."
-echo "View logs with: docker-compose logs -f"
-echo "Stop services with: docker-compose down" 
+echo "View logs with: $COMPOSE logs -f"
+echo "Stop services with: $COMPOSE down" 
