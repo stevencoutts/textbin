@@ -23,6 +23,9 @@
       <ul>
         <% paste.attachments.forEach(function(att) { %>
           <li>
+            <% if (att.mimetype && att.mimetype.indexOf('image/') === 0) { %>
+              <img src="/attachment/<%= att.id %>/view" alt="<%= att.filename %>" class="attachment-preview">
+            <% } %>
             <a href="/attachment/<%= att.id %>" download><%= att.filename %></a>
             (<%= (att.size / 1024).toFixed(1) %> KB)
           </li>
